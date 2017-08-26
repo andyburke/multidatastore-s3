@@ -46,7 +46,7 @@ const S3_Driver = {
 
         const data = JSON.stringify( object, null, 4 );
 
-        await this.options.s3.upload( {
+        await this.s3.upload( {
             Bucket: this.options.bucket,
             ContentType: 'application/json',
             Key: path,
@@ -60,7 +60,7 @@ const S3_Driver = {
             throw new Error( 'invalid id path' );
         }
 
-        const response = await this.options.s3.getObject( {
+        const response = await this.s3.getObject( {
             Bucket: this.options.bucket,
             Key: path
         } ).promise();
@@ -76,7 +76,7 @@ const S3_Driver = {
             throw new Error( 'invalid id path' );
         }
 
-        await this.options.s3.deleteObject( {
+        await this.s3.deleteObject( {
             Bucket: this.options.bucket,
             Key: path
         } ).promise();
