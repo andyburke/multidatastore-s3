@@ -85,7 +85,9 @@ const S3_Driver = {
 
 module.exports = {
     create: function( _options ) {
-        const options = extend( {
+        const instance = Object.assign( {}, S3_Driver );
+
+        instance.options = extend( {
             readable: true,
             id_field: 'id',
             s3: {
@@ -94,15 +96,12 @@ module.exports = {
             },
             bucket: null,
             get_object_path: object => {
-                return `/${ object[ this.options.id_field ] }.json`;
+                return `/${ object[ instance.options.id_field ] }.json`;
             },
             get_id_path: id => {
                 return `/${ id }.json`;
             }
         }, _options );
-
-        const instance = Object.assign( {}, S3_Driver );
-        instance.options = options;
 
         return instance;
     }
