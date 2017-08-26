@@ -65,7 +65,7 @@ const S3_Driver = {
             Key: path
         } ).promise();
 
-        const object = JSON.parse( response && response.body );
+        const object = JSON.parse( response && response.Body );
 
         return object;
     },
