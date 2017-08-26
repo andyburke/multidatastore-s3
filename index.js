@@ -60,12 +60,24 @@ const S3_Driver = {
             throw new Error( 'invalid id path' );
         }
 
-        const response = await this.s3.getObject( {
-            Bucket: this.options.bucket,
-            Key: path
-        } ).promise();
+        let object = undefined;
 
-        const object = JSON.parse( response && response.Body );
+        try {
+            const response = await this.s3.getObject( {
+                Bucket: this.options.bucket,
+                Key: path
+            } ).promise();
+
+            object = JSON.parse( response && response.Body );
+        }
+        catch( ex ) {
+            if ( ex && ex.code && ex.code === 'NoSuchKey' ) {
+                object = undefined;
+            }
+            else {
+                throw ex;
+            }
+        }
 
         return object;
     },
@@ -76,10 +88,19 @@ const S3_Driver = {
             throw new Error( 'invalid id path' );
         }
 
-        await this.s3.deleteObject( {
-            Bucket: this.options.bucket,
-            Key: path
-        } ).promise();
+        try {
+            await this.s3.deleteObject( {
+                Bucket: this.options.bucket,
+                Key: path
+            } ).promise();
+        }
+        catch( ex ) {
+            if ( ex && ex.code && ex.code === 'NoSuchKey' ) {
+                return;
+            }
+
+            throw ex;
+        }
     }
 };
 
