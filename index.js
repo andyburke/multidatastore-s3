@@ -9,7 +9,7 @@ const S3_Driver = {
             throw new Error( 'Must specify a bucket!' );
         }
 
-        if ( this.options.s3 && this.options.s3.endpoint && typeof this.options.s3.endpoint === 'string' && this.options.s3.length ) {
+        if ( this.options.s3.endpoint && typeof this.options.s3.endpoint === 'string' && this.options.s3.endpoint.length ) {
             this.options.s3.endpoint = new AWS.Endpoint( this.options.s3.endpoint );
         }
         else {
