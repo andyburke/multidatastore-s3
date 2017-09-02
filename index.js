@@ -12,6 +12,9 @@ const S3_Driver = {
         if ( this.options.s3 && this.options.s3.endpoint && typeof this.options.s3.endpoint === 'string' && this.options.s3.length ) {
             this.options.s3.endpoint = new AWS.Endpoint( this.options.s3.endpoint );
         }
+        else {
+            delete this.options.s3.endpoint;
+        }
 
         this.s3 = new AWS.S3( this.options.s3 );
 
