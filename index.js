@@ -36,7 +36,7 @@ const S3_Driver = {
         await this.s3.createBucket( {
             Bucket: this.options.bucket,
             CreateBucketConfiguration: {
-                LocationConstraint: this.options.region
+                LocationConstraint: this.options.s3.region
             }
         } ).promise();
 
