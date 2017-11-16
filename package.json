@@ -1,11 +1,12 @@
 {
   "name": "multidatastore-s3",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "multi data store s3 driver",
   "contributors": [
     "Andy Burke <andy.burke@mailbox.earth> (https://github.com/andyburke)"
   ],
   "main": "index.js",
+  "files": [],
   "scripts": {
     "test": "tape test/**/*.js | tap-spec"
   },
