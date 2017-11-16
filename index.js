@@ -51,7 +51,15 @@ const S3_Driver = {
             throw new Error( 'invalid object path' );
         }
 
-        const data = JSON.stringify( object, null, 4 );
+        const processed = await this.options.processors.map( processor => processor.serialize ).reduce( async ( _object, serialize ) => {
+            if ( !serialize ) {
+                return _object;
+            }
+
+            return await serialize( _object );
+        }, object );
+
+        const data = JSON.stringify( processed, null, 4 );
 
         await this.s3.upload( {
             Bucket: this.options.bucket,
@@ -75,7 +83,15 @@ const S3_Driver = {
                 Key: path
             } ).promise();
 
-            object = JSON.parse( response && response.Body );
+            const processed = JSON.parse( response && response.Body );
+
+            object = await this.options.processors.map( processor => processor.deserialize ).reduceRight( async ( _object, deserialize ) => {
+                if ( !deserialize ) {
+                    return _object;
+                }
+
+                return await deserialize( _object );
+            }, processed );
         }
         catch( ex ) {
             if ( ex && ex.code && ex.code === 'NoSuchKey' ) {
@@ -128,7 +144,8 @@ module.exports = {
             },
             get_id_path: id => {
                 return `/${ id }.json`;
-            }
+            },
+            processors: []
         }, _options );
 
         return instance;
