@@ -115,7 +115,7 @@ module.exports = {
     create: function( _options ) {
         const instance = Object.assign( {}, S3_Driver );
 
-        instance.options = extend( {
+        instance.options = extend( true, {
             readable: true,
             id_field: 'id',
             s3: {
