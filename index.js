@@ -26,7 +26,12 @@ const S3_Driver = {
             } ).promise();
         }
         catch( ex ) {
-            bucket_exists = false;
+            if ( ex && ex.code === 'NotFound' ) {
+                bucket_exists = false;
+            }
+            else {
+                throw ex;
+            }
         }
 
         if ( bucket_exists ) {
@@ -124,10 +129,10 @@ module.exports = {
             },
             bucket: null,
             get_object_path: object => {
-                return `/${ object[ instance.options.id_field ] }.json`;
+                return `${ object[ instance.options.id_field ] }.json`;
             },
             get_id_path: id => {
-                return `/${ id }.json`;
+                return `${ id }.json`;
             },
             processors: []
         }, _options );
