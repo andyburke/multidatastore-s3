@@ -38,12 +38,19 @@ const S3_Driver = {
             return;
         }
 
-        await this.s3.createBucket( {
-            Bucket: this.options.bucket,
-            CreateBucketConfiguration: {
-                LocationConstraint: this.options.s3.region
+        try {
+            await this.s3.createBucket( {
+                Bucket: this.options.bucket,
+                CreateBucketConfiguration: {
+                    LocationConstraint: this.options.s3.region
+                }
+            } ).promise();
+        }
+        catch( ex ) {
+            if ( ex && ex.code !== 'BucketAlreadyOwnedByYou' ) {
+                throw ex;
             }
-        } ).promise();
+        }
 
         await this.s3.waitFor( 'bucketExists', {
             Bucket: this.options.bucket
